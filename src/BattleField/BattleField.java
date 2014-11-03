@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2014 kademika.com
  */
-//package day2;
+package BattleField;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -13,99 +13,126 @@ import javax.swing.WindowConstants;
 public class BattleField extends JPanel {
 
 	boolean COLORDED_MODE = true;
-	
+
 	int tankX = 0;
 	int tankY = 0;
-	
+
 	long speed = 225;
-	
-		
+
 	void runTheGame() throws Exception {
 		String moveTo = "right";
-		
-	
-		while (true){
-			if (moveTo.equals ("right")){
-				
-				tankX +=64;
-				
-				if(tankX >= 8*64){
+
+		while (true) {
+			if (moveTo.equals("right")) {
+
+				tankX += 64;
+
+				if (tankX >= 8 * 64) {
 					moveTo = "left";
 				}
 			} else {
-				
-				tankX -=64;
-				
-				if(tankX <= 0){
+
+				tankX -= 64;
+
+				if (tankX <= 0) {
 					moveTo = "right";
 				}
 			}
-			
-			repaint ();
+
+			repaint();
 			Thread.sleep(speed);
-			
-			}
-	}
-	
-	
-	void move(int direction) throws Exception {
-		
-		if (direction == 1){
-		
-			tankY -=64;
-		
-		} else if (direction == 2){
-			
-			tankY +=64;
-			
-		} else if (direction == 3){
-			
-			tankX -=64;
-			
-		} else {
-			
-			tankX +=64;
+
 		}
-		repaint ();	
-		
+	}
+
+	/**
+	 * 
+	 * @param v
+	 *            String in range "a..i"
+	 * @param h
+	 *            Numeric string in range "1..9"
+	 * @return
+	 */
+
+	String getQuadrant(String v, String h) {
+		String literals = "abcdefghi";
+		int x, y;
+
+		x = literals.indexOf(v); // 0..8
+		y = Integer.parseInt(h) - 1; // 0..8
+
+		if (x == -1) {
+			return "Invalid Input";
+		}
+
+		if (y < 0 || y > 8) {
+			return "Invalid Input";
+		}
+
+		return (x * 64) + "_" + (y * 64);
+	}
+
+	void printCoordinates(String v, String h) {
+		String result = getQuadrant(v, h);
+		String x = result.substring(0, result.indexOf("_"));
+		String y = result.substring(result.indexOf("_") + 1);
+		System.out.println(v + h + ":(" + x + "px, " + y + "px)");
+
+	}
+
+	void move(int direction) throws Exception {
+
+		if (direction == 1) {
+
+			tankY -= 64;
+
+		} else if (direction == 2) {
+
+			tankY += 64;
+
+		} else if (direction == 3) {
+
+			tankX -= 64;
+
+		} else {
+
+			tankX += 64;
+		}
+		repaint();
+
 		Thread.sleep(speed);
 	}
-	
+
 	void moveRandom() throws Exception {
-		
-		while (true){
-			int dir = (int) (System.currentTimeMillis()% 4)+1;
-			move(dir);
+
+		while (true) {
+			int direction = (int) (System.currentTimeMillis() % 4) + 1;
+			move(direction);
 		}
 	}
-		
-	// Magic bellow. Do not worry about this now, you will understand everything in this course.
-	// Please concentrate on your tasks only.
 
 	final int BF_WIDTH = 576;
 	final int BF_HEIGHT = 576;
-	
+
 	public static void main(String[] args) throws Exception {
 		BattleField bf = new BattleField();
-		//bf.runTheGame();
-//		bf.move(2);
-//		bf.move(2);
-//		bf.move(4);
-//		bf.move(4);
-//		bf.move(1);
-//		bf.move(3);
-		
-		
+		// bf.runTheGame();
+		// bf.move(2);
+		// bf.move(2);
+		// bf.move(4);
+		// bf.move(4);
+		// bf.move(1);
+		// bf.move(3);
+
 		bf.move(2);
 		bf.move(2);
 		bf.move(2);
 		bf.move(4);
 		bf.move(4);
 		bf.move(4);
-		
+
 		bf.moveRandom();
-		
-		
+
 	}
 
 	public BattleField() throws Exception {
@@ -118,10 +145,10 @@ public class BattleField extends JPanel {
 		frame.setVisible(true);
 	}
 
-	//@Override
+	// @Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		
+
 		int i = 0;
 		Color cc;
 		for (int v = 0; v < 9; v++) {
@@ -140,10 +167,9 @@ public class BattleField extends JPanel {
 				g.fillRect(h * 64, v * 64, 64, 64);
 			}
 		}
-		
+
 		g.setColor(new Color(255, 0, 0));
 		g.fillRect(tankX, tankY, 64, 64);
 	}
 
 }
-
